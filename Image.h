@@ -50,6 +50,8 @@ public:
     void alphaBlending(const Image* img);
     Image* makeHistgram() const;
 
+    void filter(double (*func)(int i, int j, int height, int width));
+
     // --- static method --- //
     static Image* makeToneCurve(ToneCurve& toneCurve);
     static Image* emboss(const Image* img, int shift = 1);

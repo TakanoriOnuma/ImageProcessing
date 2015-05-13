@@ -247,6 +247,16 @@ Image* Image::makeHistgram() const {
     return imgHist;
 }
 
+void Image::filter(double (*func)(int i, int j, int height, int width)) {
+    for(int y = 0; y < this->height; y++) {
+        for(int x = 0; x < this->width; x++) {
+            int value = (*this)[y][x] + (int)(*func)(y, x, this->height, this->width);
+            value = (value > 255) ? 255 : (value >= 0) ? value : 0;
+            (*this)[y][x] = (unsigned char)value;
+        }
+    }
+}
+
 
 // --- static method --- //
 Image* Image::makeToneCurve(ToneCurve& toneCurve) {

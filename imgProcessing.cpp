@@ -7,16 +7,16 @@
 
 using namespace std;
 
+double filter(int i, int j, int height, int width)
+{
+    return (double)255 * j / width;
+}
+
 int main()
 {
     Image* img = new Image(256, 256, 0);
-
-    for(int i = img->getHeight() / 4; i < img->getHeight() * 3 / 4; i++) {
-        for(int j = img->getWidth() / 4; j < img->getWidth() * 3 / 4; j++) {
-            (*img)[i][j] = (unsigned char)200;
-        }
-    }
-    img->save("quarter_rect.pgm");
+    img->filter(filter);
+    img->save("left_lenear.pgm");
 
     delete img;
     return 0;
