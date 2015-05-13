@@ -32,10 +32,14 @@ public:
     ~Image();
 
     // --- ゲッター --- //
+    int getHeight() const { return this->height; }
+    int getWidth()  const { return this->width;  }
     int getMinBright() const;
     int getMaxBright() const;
     void getBright(int* min, int* max) const;
     double getContrast() const;
+
+    unsigned char* operator[](int i) { return arr + i * width; }
 
     void load(const char filename[]);
     void save(const char filename[]);
