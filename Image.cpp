@@ -28,6 +28,18 @@ Image::Image() {
     init();
 }
 
+Image::Image(int height, int width, int fill) {
+    init();
+    this->format = 5;
+    this->height = height;
+    this->width  = width;
+    this->max    = 255;
+    this->arr    = new unsigned char[this->height * this->width]();
+    for(int i = 0; i < this->height * this->width; i++) {
+        this->arr[i] = (unsigned char)fill;
+    }
+}
+
 Image::Image(const char filename[]) {
     init();
     load(filename);

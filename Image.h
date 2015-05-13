@@ -21,6 +21,7 @@ class Image {
 public:
     // --- コンストラクタ --- //
     Image();
+    Image(int height, int width, int fill = 0);
     Image(const char filename[]);
     Image(const Image& img);
 

@@ -7,16 +7,9 @@ using namespace std;
 
 int main()
 {
-    Image* img = new Image("images/D.pgm");
-    Image* img2 = new Image("images/C.pgm");
+    Image* img = new Image(256, 256, 100);
+    img->save("fill100.pgm");
 
-    img->alphaBlending(img2);
-    img->save("D_C_alphablend.pgm");
-    Image* imgAlphaBlendHist = img->makeHistgram();
-    imgAlphaBlendHist->save("D_C_alphablend_hist.pgm");
-
-    delete imgAlphaBlendHist;
     delete img;
-    delete img2;
     return 0;
 }
