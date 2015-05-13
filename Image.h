@@ -13,6 +13,11 @@ class Image {
     int max;
     unsigned char* arr;
 
+    // --- private method --- //
+    void readHeader(std::ifstream& fin);
+    void writeHeader(std::ofstream& fout);
+    std::string readLine(std::ifstream& fin);
+
 public:
     // --- コンストラクタ --- //
     Image();
@@ -34,10 +39,7 @@ public:
     void load(const char filename[]);
     void save(const char filename[]);
 
-    void readHeader(std::ifstream& fin);
-    void writeHeader(std::ofstream& fout);
     void printHeader() const;
-    std::string readLine(std::ifstream& fin);
     void inverse();
     void transCurve(ToneCurve& toneCurve);
     void alphaBlending(const Image* img);
