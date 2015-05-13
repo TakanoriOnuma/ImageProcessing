@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <stdio.h>
 #include <typeinfo>
 #include <math.h>
@@ -25,12 +26,21 @@ double filter(int i, int j, int height, int width)
         30 * square(j, 8, width);
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    Image* img = new Image(256, 256, 100);
-    img->filter(filter);
-    img->save("squarewave.pgm");
+    if(argc != 2) {
+        cout << "Usage: filename" << endl;
+        return -1;
+    }
+
+    string filename = argv[1];
+    Image* img = new Image(filename.c_str());
+    Image* imgHist = img->makeHistgram();
+    filename.erase(filename.size() - 4);
+    filename += "_hist.pgm";
+    imgHist->save(filename.c_str());
 
     delete img;
+    delete imgHist;
     return 0;
 }
