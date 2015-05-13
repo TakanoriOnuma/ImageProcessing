@@ -41,7 +41,7 @@ Image::Image(const Image& img) {
         this->height = img.height;
         this->width  = img.width;
         this->max    = img.max;
-        this->arr    = new char[this->height * this->width];
+        this->arr    = new unsigned char[this->height * this->width];
         for(int i = 0; i < this->height; i++) {
             for(int j = 0; j < this->width; j++) {
                 int idx = i * this->width + j;
@@ -81,11 +81,11 @@ void Image::getBright(int* min, int* max) const {
     *max = 0;
     for(int i = 0; i < this->height; i++) {
         for(int j = 0; j < this->width; j++) {
-            if(*min > (unsigned char)this->arr[i * this->width + j]) {
-                *min = (unsigned char)this->arr[i * this->width + j];
+            if(*min > this->arr[i * this->width + j]) {
+                *min = this->arr[i * this->width + j];
             }
-            if(*max < (unsigned char)this->arr[i * this->width + j]) {
-                *max = (unsigned char)this->arr[i * this->width + j];
+            if(*max < this->arr[i * this->width + j]) {
+                *max = this->arr[i * this->width + j];
             }
         }
     }
@@ -106,8 +106,8 @@ void Image::load(const char filename[]) {
     if(arr != NULL) {
         delete arr;
     }
-    arr = new char[height * width]();
-    fin.read(arr, height * width);
+    arr = new unsigned char[height * width]();
+    fin.read((char*)arr, height * width);
 
     fin.close();
 }
@@ -116,7 +116,7 @@ void Image::save(const char filename[]) {
     ofstream fout(filename, ios::out | ios::binary);
 
     writeHeader(fout);
-    fout.write(this->arr, this->height * this->width);
+    fout.write((char*)this->arr, this->height * this->width);
     fout.close();
 }
 
@@ -168,7 +168,7 @@ string Image::readLine(ifstream& fin) {
 void Image::inverse() {
     for(int i = 0; i < this->height; i++) {
         for(int j = 0; j < this->width; j++) {
-            this->arr[i * this->width + j] = (unsigned char)(255 - this->arr[i * this->width + j]);
+            this->arr[i * this->width + j] = (255 - this->arr[i * this->width + j]);
         }
     }
 }
@@ -182,7 +182,7 @@ void Image::transCurve(ToneCurve& toneCurve) {
     for(int i = 0; i < this->height; i++) {
         for(int j = 0; j < this->width; j++) {
             int idx = i * this->width + j;
-            this->arr[idx] = table[(unsigned char)this->arr[idx]];
+            this->arr[idx] = table[this->arr[idx]];
         }
     }
 }
@@ -192,7 +192,7 @@ void Image::alphaBlending(const Image* img) {
         double alpha = (double)j / this->width;
         for(int i = 0; i < this->height; i++) {
             int idx = i * this->width + j;
-            this->arr[idx] = alpha * (unsigned char)this->arr[idx] + (1.0 - alpha) * (unsigned char)img->arr[idx];
+            this->arr[idx] = alpha * this->arr[idx] + (1.0 - alpha) * img->arr[idx];
         }
     }
 }
@@ -201,7 +201,7 @@ Image* Image::makeHistgram() const {
     double hist[256] = {0};
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            hist[(unsigned char)this->arr[i * width + j]] += 1;
+            hist[this->arr[i * width + j]] += 1;
         }
     }
 
@@ -220,7 +220,7 @@ Image* Image::makeHistgram() const {
     imgHist->width  = 256;
     imgHist->height = 256;
     imgHist->max = 255;
-    imgHist->arr = new char[imgHist->width * imgHist->height];
+    imgHist->arr = new unsigned char[imgHist->width * imgHist->height];
     for(int i = 0; i < imgHist->height; i++) {
         for(int j = 0; j < imgHist->width; j++) {
             if(256 - i > hist[j]) {
@@ -247,7 +247,7 @@ Image* Image::makeToneCurve(ToneCurve& toneCurve) {
     imgCurve->width  = 256;
     imgCurve->height = 256;
     imgCurve->max = 255;
-    imgCurve->arr = new char[imgCurve->height * imgCurve->height];
+    imgCurve->arr = new unsigned char[imgCurve->height * imgCurve->height];
     for(int i = 0; i < imgCurve->height; i++) {
         for(int j = 0; j < imgCurve->width; j++) {
             imgCurve->arr[i * imgCurve->width + j] = (table[j] == 255 - i) ? 0x00 : 0xff;
@@ -262,7 +262,7 @@ Image* Image::emboss(const Image* img, int shift) {
     imgEmboss->width  = img->width - shift;
     imgEmboss->height = img->height - shift;
     imgEmboss->max = 255;
-    imgEmboss->arr = new char[imgEmboss->height * imgEmboss->width];
+    imgEmboss->arr = new unsigned char[imgEmboss->height * imgEmboss->width];
 
     for(int i = 0; i < imgEmboss->height; i++) {
         for(int j = 0; j < imgEmboss->width; j++) {

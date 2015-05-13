@@ -11,7 +11,7 @@ class Image {
     int height;
     int width;
     int max;
-    char* arr;
+    unsigned char* arr;
 
 public:
     // --- コンストラクタ --- //
