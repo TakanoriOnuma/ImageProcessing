@@ -6,6 +6,7 @@
 
 #include "ToneCurve.h"
 #include "Image.h"
+#include "Matrix.h"
 
 using namespace std;
 
@@ -22,15 +23,20 @@ double square(int x, int f, int T)
 
 double filter(int i, int j, int height, int width)
 {
-    return 30 * square(i, 2, width);
+    return 50 * square(i, 16, height);
 }
 
 int main(int argc, char* argv[])
 {
-    Image* img = new Image(256, 256, 100);
-    img->filter(filter);
-    img->save("test.pgm");
+    Matrix<double> matFil(3, 3);
+    matFil[0][0] = 0;   matFil[0][1] = 1;   matFil[0][2] = 0;
+    matFil[1][0] = 1;   matFil[1][1] = -4;  matFil[1][2] = 1;
+    matFil[2][0] = 0;   matFil[2][1] = 1;   matFil[2][2] = 0;
+    Image* img = new Image("B.pgm");
+    Image* copyImg = img->filter(matFil, 100);
+    copyImg->save("test.pgm");
 
     delete img;
+    delete copyImg;
     return 0;
 }
