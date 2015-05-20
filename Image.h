@@ -53,7 +53,7 @@ public:
     Image* makeHistgram() const;
 
     template <typename T>
-    Image* filter(const Matrix<T>& matFil, int offset = 100);
+    Image* filter(const Matrix<T>& matFil, int offset = 128);
     void filter(double (*func)(int i, int j, int height, int width));
 
     // --- static method --- //
