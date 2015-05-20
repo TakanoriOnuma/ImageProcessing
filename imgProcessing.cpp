@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <stdio.h>
 #include <typeinfo>
@@ -23,20 +24,40 @@ double square(int x, int f, int T)
 
 double filter(int i, int j, int height, int width)
 {
-    return 50 * square(i, 16, height);
+    return 30 * sin(4 * 2 * M_PI * j / width) +
+        30 * sin(32 * 2 * M_PI * i / height);
 }
 
 int main(int argc, char* argv[])
 {
-    Matrix<double> matFil(3, 3);
-    matFil[0][0] = 0;   matFil[0][1] = 1;   matFil[0][2] = 0;
-    matFil[1][0] = 1;   matFil[1][1] = -4;  matFil[1][2] = 1;
-    matFil[2][0] = 0;   matFil[2][1] = 1;   matFil[2][2] = 0;
-    Image* img = new Image("B.pgm");
-    Image* copyImg = img->filter(matFil, 100);
-    copyImg->save("test.pgm");
+    if(argc != 3) {
+        cout << "Usage: imgFileName filterFileName" << endl;
+        return -1;
+    }
+    string imgFileName = argv[1];
+    string filterFileName = argv[2];
+
+    ifstream ifs(filterFileName.c_str());
+    int height, width;
+    ifs >> height >> width;
+
+    Matrix<double> matFil(height, width);
+    for(int i = 0; i < matFil.getHeight(); i++) {
+        for(int j = 0; j < matFil.getWidth(); j++) {
+            ifs >> matFil[i][j];
+        }
+    }
+
+    Image* img = new Image(imgFileName.c_str());
+    Image* imgFil = img->filter(matFil);
+
+    imgFileName.erase(imgFileName.size() - 4);
+    imgFileName += "_filter.pgm";
+
+    imgFil->save(imgFileName.c_str());
 
     delete img;
-    delete copyImg;
+    delete imgFil;
+
     return 0;
 }
