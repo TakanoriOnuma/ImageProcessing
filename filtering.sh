@@ -6,6 +6,7 @@ do
 
     # 縦微分フィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "0.0 -1.0 0.0" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
     echo "0.0 1.0 0.0" >> mat.dat
@@ -14,6 +15,7 @@ do
 
     # 横微分フィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
     echo "-1.0 0.0 1.0" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
@@ -22,6 +24,7 @@ do
 
     # 縦のプリューウィットフィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "-1.0 -1.0 -1.0" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
     echo "1.0 1.0 1.0" >> mat.dat
@@ -30,6 +33,7 @@ do
 
     # 横のプリューウィットフィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "-1.0 0.0 1.0" >> mat.dat
     echo "-1.0 0.0 1.0" >> mat.dat
     echo "-1.0 0.0 1.0" >> mat.dat
@@ -38,6 +42,7 @@ do
 
     # 縦のソーベルフィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "-1.0 -2.0 -1.0" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
     echo "1.0 2.0 1.0" >> mat.dat
@@ -46,6 +51,7 @@ do
 
     # 横のソーベルフィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "-1.0 0.0 1.0" >> mat.dat
     echo "-2.0 0.0 2.0" >> mat.dat
     echo "-1.0 0.0 1.0" >> mat.dat
@@ -54,6 +60,7 @@ do
 
     # 縦2次微分フィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "0.0 1.0 0.0" >> mat.dat
     echo "0.0 -2.0 0.0" >> mat.dat
     echo "0.0 1.0 0.0" >> mat.dat
@@ -62,6 +69,7 @@ do
 
     # 横2次微分フィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
     echo "1.0 -2.0 1.0" >> mat.dat
     echo "0.0 0.0 0.0" >> mat.dat
@@ -70,6 +78,7 @@ do
 
     # ラプラシアンフィルタ
     echo "3 3" > mat.dat
+    echo "128" >> mat.dat
     echo "0.0 1.0 0.0" >> mat.dat
     echo "1.0 -4.0 1.0" >> mat.dat
     echo "0.0 1.0 0.0" >> mat.dat
@@ -78,10 +87,11 @@ do
 
     # 鮮鋭化処理
     echo "3 3" > mat.dat
+    echo "0" >> mat.dat
     echo "0.0 -1.0 0.0" >> mat.dat
     echo "-1.0 5.0 -1.0" >> mat.dat
     echo "0.0 -1.0 0.0" >> mat.dat
     ./filtering $filename mat.dat
-    mv ${file}_filter.pgm ${file}_laplacian.pgm
+    mv ${file}_filter.pgm ${file}_sharpened.pgm
 
 done

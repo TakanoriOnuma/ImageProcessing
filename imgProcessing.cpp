@@ -40,6 +40,8 @@ int main(int argc, char* argv[])
     ifstream ifs(filterFileName.c_str());
     int height, width;
     ifs >> height >> width;
+    int offset;
+    ifs >> offset;
 
     Matrix<double> matFil(height, width);
     for(int i = 0; i < matFil.getHeight(); i++) {
@@ -49,7 +51,7 @@ int main(int argc, char* argv[])
     }
 
     Image* img = new Image(imgFileName.c_str());
-    Image* imgFil = img->filter(matFil);
+    Image* imgFil = img->filter(matFil, offset);
 
     imgFileName.erase(imgFileName.size() - 4);
     imgFileName += "_filter.pgm";
