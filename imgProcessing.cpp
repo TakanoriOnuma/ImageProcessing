@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     matFil[0][0] = 0;   matFil[0][1] = 1;   matFil[0][2] = 0;
     matFil[1][0] = 1;   matFil[1][1] = -4;  matFil[1][2] = 1;
     matFil[2][0] = 0;   matFil[2][1] = 1;   matFil[2][2] = 0;
-    Image* img = new Image("B.pgm");
+    Image* img = new Image("H.pgm");
     Image* copyImg = img->filter(matFil, 100);
     copyImg->save("test.pgm");
 
