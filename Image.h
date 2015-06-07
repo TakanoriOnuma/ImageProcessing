@@ -63,23 +63,22 @@ public:
 
 template <typename T>
 Image* Image::filter(const Matrix<T>& matFil, int offset) {
-    Image* img = new Image(this->height, this->width, 0);
-    for(int i = 0; i < this->height; i++) {
-        for(int j = 0; j < this->width; j++) {
+    int matHalfHeight = matFil.getHeight() / 2;
+    int matHalfWidth  = matFil.getWidth() / 2;
+    Image* img = new Image(this->height - 2 * matHalfHeight, this->width - 2 * matHalfWidth, 0);
+    for(int i = matHalfHeight; i < this->height - matHalfHeight; i++) {
+        for(int j = matHalfWidth; j < this->width - matHalfWidth; j++) {
             // 畳み込みを行う
             int value = offset;
             for(int m = 0; m < matFil.getHeight(); m++) {
                 for(int n = 0; n < matFil.getWidth(); n++) {
-                    int voffset = m - matFil.getHeight() / 2;
-                    int hoffset = n - matFil.getWidth() / 2;
-                    if(i + voffset >= 0 && i + voffset < this->height &&
-                        j + hoffset >= 0 && j + hoffset < this->width) {
-                        value += (*this)[i + voffset][j + hoffset] * matFil[m][n];
-                    }
+                    int voffset = m - matHalfHeight;
+                    int hoffset = n - matHalfWidth;
+                    value += (*this)[i + voffset][j + hoffset] * matFil[m][n];
                 }
             }
             value = (value < 0) ? 0 : (value <= 255) ? value : 255;
-            (*img)[i][j] = (unsigned char)value;
+            (*img)[i - matHalfHeight][j - matHalfWidth] = (unsigned char)value;
         }
     }
     return img;
