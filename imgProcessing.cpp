@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <typeinfo>
 #include <math.h>
+#include <complex>
 
 #include "ToneCurve.h"
 #include "Image.h"
 #include "Matrix.h"
+#include "fft.h"
 
 using namespace std;
 
@@ -28,15 +30,23 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    Matrix<double> matFil(3, 3);
-    matFil[0][0] = 0;   matFil[0][1] = 1;   matFil[0][2] = 0;
-    matFil[1][0] = 1;   matFil[1][1] = -4;  matFil[1][2] = 1;
-    matFil[2][0] = 0;   matFil[2][1] = 1;   matFil[2][2] = 0;
-    Image* img = new Image("H.pgm");
-    Image* copyImg = img->filter(matFil, 100);
-    copyImg->save("test.pgm");
+    vector< complex<double> >vec(8);
+    for(int i = 0; i <= vec.size() / 2; i++) {
+        vec[i] = i * M_PI / 4;
+    }
+    for(int i = vec.size() / 2 + 1; i < vec.size(); i++) {
+        vec[i] = vec[vec.size() - i];
+    }
 
-    delete img;
-    delete copyImg;
+    for(int i = 0; i < vec.size(); i++) {
+        cout << vec[i] << endl;
+    }
+
+    cout << "--------------------" << endl;
+    vector< complex<double> > fftVec = fft(vec);
+    for(int i = 0; i < fftVec.size(); i++) {
+        cout << fftVec[i] << endl;
+    }
+
     return 0;
 }
