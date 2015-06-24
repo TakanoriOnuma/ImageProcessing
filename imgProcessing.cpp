@@ -30,12 +30,24 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    Image* img = new Image("C.pgm");
+    Image* img = new Image("B.pgm");
 
     vector< vector< complex<double> > > vec = fft(img);
-    swap(vec);
     Image* fftImg = new Image(vec, true);
     fftImg->save("fftImg.pgm");
+    swap(vec);
+
+    // ローパスフィルタ
+    for(int i = 0; i < vec.size(); i++) {
+        for(int j = 0; j < vec[i].size(); j++) {
+            if(i < vec.size() / 4 || i > 3 * vec.size() / 4
+                || j < vec[i].size() / 4 || j > 3 * vec[i].size() / 4) {
+                    vec[i][j] = 0;
+            }
+        }
+    }
+    Image* fftFilImg = new Image(vec, true);
+    fftFilImg->save("fftFilImg.pgm");
 
     swap(vec);
     vector< vector< complex<double> > > ifftVec = ifft(vec);
