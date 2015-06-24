@@ -30,22 +30,20 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    vector< complex<double> >vec(8);
-    for(int i = 0; i <= vec.size() / 2; i++) {
-        vec[i] = i * M_PI / 4;
+    Image* img = new Image(256, 256);
+    for(int i = 0; i < img->getHeight(); i++) {
+        for(int j = 0; j < img->getWidth(); j++) {
+            (*img)[i][j] = 127 * sin(j * M_PI / 4) + 127;
+        }
     }
-    for(int i = vec.size() / 2 + 1; i < vec.size(); i++) {
-        vec[i] = vec[vec.size() - i];
-    }
+    img->save("test.pgm");
 
-    for(int i = 0; i < vec.size(); i++) {
-        cout << vec[i] << endl;
-    }
+    Image* fftImg = fft(img);
+    fftImg->save("fftImg.pgm");
 
-    cout << "--------------------" << endl;
-    vector< complex<double> > fftVec = fft(vec);
-    for(int i = 0; i < fftVec.size(); i++) {
-        cout << fftVec[i] << endl;
+    delete img;
+    if(fftImg != NULL) {
+        delete fftImg;
     }
 
     return 0;

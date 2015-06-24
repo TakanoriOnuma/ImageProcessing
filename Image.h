@@ -42,6 +42,7 @@ public:
     double getContrast() const;
 
     unsigned char* operator[](int i) { return arr + i * width; }
+    unsigned char* operator[](int i) const { return arr + i * width; }
 
     void load(const char filename[]);
     void save(const char filename[]);
