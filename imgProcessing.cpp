@@ -30,6 +30,26 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
+    cout << "test" << endl;
+    vector< complex<double> > testVec(256);
+    testVec[100] = 255;
+    for(int i = 0; i < testVec.size(); i++) {
+        cout << testVec[i] << ", ";
+    }
+    cout << '\n';
+    testVec = fft(testVec);
+    for(int i = 0; i < testVec.size(); i++) {
+        cout << testVec[i] << ", ";
+    }
+    cout << '\n';
+    testVec = ifft(testVec);
+    for(int i = 0; i < testVec.size(); i++) {
+        cout << testVec[i] << ", ";
+    }
+    cout << '\n';
+    return 0;
+
+
     Image* img = new Image(16, 16);
     for(int i = 0; i < img->getHeight(); i++) {
         for(int j = 0; j < img->getWidth(); j++) {
@@ -42,10 +62,24 @@ int main(int argc, char* argv[])
     Image* fftImg = new Image(vec);
     fftImg->save("fftImg.pgm");
 
+    /*
+    vector< vector< complex<double> > > ifftVec = ifft(vec);
+    for(int i = 0; i < ifftVec.size(); i++) {
+        for(int j = 0; j < ifftVec[i].size(); j++) {
+            cout << ifftVec[i][j] << ", ";
+        }
+        cout << '\n';
+    }
+    Image* ifftImg = new Image(ifftVec);
+    ifftImg->save("ifftImg.pgm");
+    */
+
+
     delete img;
     if(fftImg != NULL) {
         delete fftImg;
     }
+    // delete ifftImg;
 
     return 0;
 }
