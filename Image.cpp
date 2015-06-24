@@ -63,6 +63,34 @@ Image::Image(const Image& img) {
     }
 }
 
+Image::Image(const vector< vector< complex<double> > >& vec)
+{
+    // 絶対値を求める
+    double max = 0;
+    vector< vector<double> > absVec(vec.size(), vector<double>(vec[0].size()));
+    for(int i = 0; i < absVec.size(); i++) {
+        for(int j = 0; j < absVec[i].size(); j++) {
+            absVec[i][j] = abs(vec[i][j]);
+            if(absVec[i][j] > max) {
+                max = absVec[i][j];
+            }
+        }
+    }
+
+    // 画像を作る
+    init();
+    this->format = 5;
+    this->height = vec.size();
+    this->width  = vec[0].size();
+    this->max    = 255;
+    this->arr    = new unsigned char[this->height * this->width]();
+    for(int i = 0; i < this->height; i++) {
+        for(int j = 0; j < this->width; j++) {
+            (*this)[i][j] = (unsigned char)((255 * absVec[i][j]) / max);
+        }
+    }
+}
+
 void Image::init() {
     arr = NULL;
     comment = "";

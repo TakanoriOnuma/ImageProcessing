@@ -30,7 +30,7 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    Image* img = new Image(256, 256);
+    Image* img = new Image(16, 16);
     for(int i = 0; i < img->getHeight(); i++) {
         for(int j = 0; j < img->getWidth(); j++) {
             (*img)[i][j] = 127 * sin(j * M_PI / 4) + 127;
@@ -38,7 +38,8 @@ int main(int argc, char* argv[])
     }
     img->save("test.pgm");
 
-    Image* fftImg = fft(img);
+    vector< vector< complex<double> > > vec = fft(img);
+    Image* fftImg = new Image(vec);
     fftImg->save("fftImg.pgm");
 
     delete img;

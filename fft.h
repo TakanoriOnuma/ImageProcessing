@@ -5,5 +5,5 @@
 #include "Image.h"
 
 std::vector< std::complex<double> > fft(const std::vector< std::complex<double> >& vec);
-Image* fft(const Image* img);
+std::vector< std::vector< std::complex<double> > > fft(const Image* img);
 
