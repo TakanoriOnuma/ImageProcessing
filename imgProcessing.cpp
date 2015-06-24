@@ -30,13 +30,14 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    Image* img = new Image("B.pgm");
+    Image* img = new Image("C.pgm");
 
     vector< vector< complex<double> > > vec = fft(img);
+    swap(vec);
     Image* fftImg = new Image(vec, true);
     fftImg->save("fftImg.pgm");
 
-
+    swap(vec);
     vector< vector< complex<double> > > ifftVec = ifft(vec);
     Image* ifftImg = new Image(ifftVec);
     ifftImg->save("ifftImg.pgm");

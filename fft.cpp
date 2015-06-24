@@ -162,3 +162,15 @@ vector< vector< complex<double> > > ifft(const vector< vector< complex<double> >
 
     return vec;
 }
+
+// 低周波を中心に集まるように交換する
+void swap(std::vector< std::vector< std::complex<double> > >& vec)
+{
+    int half = vec.size() / 2;
+    for(int i = 0; i < half; i++) {
+        for(int j = 0; j < half; j++) {
+            swap(vec[i][j], vec[i + half][j + half]);
+            swap(vec[i][j + half], vec[i + half][j]);
+        }
+    }
+}

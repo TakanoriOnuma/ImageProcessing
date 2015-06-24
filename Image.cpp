@@ -92,6 +92,7 @@ Image::Image(const vector< vector< complex<double> > >& vec, bool logFlag)
             (*this)[i][j] = (unsigned char)((255 * absVec[i][j]) / max);
         }
     }
+
 }
 
 void Image::init() {
