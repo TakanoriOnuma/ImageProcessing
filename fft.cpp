@@ -37,7 +37,6 @@ vector< complex<double> > fft(const vector< complex<double> >& vec)
     // fftを行う
     int b = 1;
     for(int step = vec.size() / 2; step >= 1; step /= 2, b *= 2) {
-        cout << "step:" << step << endl;
         int idx = 0;
         while(idx < vec.size()) {
             for(int n = 0; n < step; n++, idx++) {
@@ -47,10 +46,6 @@ vector< complex<double> > fft(const vector< complex<double> >& vec)
             }
             idx += step;
         }
-        for(int i = 0; i < fftVec.size(); i++) {
-            cout << fftVec[i] << ", ";
-        }
-        cout << '\n';
     }
 
     // ビットリバース
@@ -58,7 +53,6 @@ vector< complex<double> > fft(const vector< complex<double> >& vec)
     for(int i = 0; i < fftVec.size(); i++) {
         unsigned int rev = reverse((unsigned int)i, bitNum);
         if(i < rev) {
-            cout << i << "<->" << rev << endl;
             swap(fftVec[i], fftVec[rev]);
         }
     }
@@ -140,42 +134,30 @@ vector< vector< complex<double> > > ifft(const vector< vector< complex<double> >
 
     // 横方向に行う
     for(int i = 0; i < vec.size(); i++) {
-        cout << "input:";
         // データのコピー
         for(int j = 0; j < vec[i].size(); j++) {
             ifftVec[j] = vec[i][j];
-            cout << ifftVec[j] << ", ";
         }
-        cout << '\n';
         // ifftを行う
         ifftVec = ifft(ifftVec);
-        cout << "output:";
         // データを戻す
         for(int j = 0; j < vec[i].size(); j++) {
             vec[i][j] = ifftVec[j];
-            cout << ifftVec[j] << ", ";
         }
-        cout << '\n';
     }
 
     // 縦方向に行う
     for(int j = 0; j < vec[0].size(); j++) {
-        cout << "input:";
         // データのコピー
         for(int i = 0; i < vec.size(); i++) {
             ifftVec[i] = vec[i][j];
-            cout << ifftVec[i] << ", ";
         }
-        cout << '\n';
         // ifftを行う
         ifftVec = ifft(ifftVec);
-        cout << "output:";
         // データを戻す
         for(int i = 0; i < vec.size(); i++) {
             vec[i][j] = ifftVec[i];
-            cout << ifftVec[i] << ", ";
         }
-        cout << '\n';
     }
 
     return vec;

@@ -63,7 +63,7 @@ Image::Image(const Image& img) {
     }
 }
 
-Image::Image(const vector< vector< complex<double> > >& vec)
+Image::Image(const vector< vector< complex<double> > >& vec, bool logFlag)
 {
     // 絶対値を求める
     double max = 0;
@@ -71,6 +71,9 @@ Image::Image(const vector< vector< complex<double> > >& vec)
     for(int i = 0; i < absVec.size(); i++) {
         for(int j = 0; j < absVec[i].size(); j++) {
             absVec[i][j] = abs(vec[i][j]);
+            if(logFlag) {
+                absVec[i][j] = log(absVec[i][j]);
+            }
             if(absVec[i][j] > max) {
                 max = absVec[i][j];
             }
