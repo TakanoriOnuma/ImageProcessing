@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
             }
         }
     }
-    Image* fftFilImg = new Image(vec, true);
+    Image* fftFilImg = new Image(vec, false);
     fftFilImg->save("fftFilImg.pgm");
 
     swap(vec);
