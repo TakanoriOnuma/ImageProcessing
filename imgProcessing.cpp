@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <typeinfo>
 #include <math.h>
+#include <complex>
 
 #include "ToneCurve.h"
 #include "Image.h"
 #include "Matrix.h"
+#include "fft.h"
 
 using namespace std;
 
@@ -28,15 +30,35 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    Matrix<double> matFil(3, 3);
-    matFil[0][0] = 0;   matFil[0][1] = 1;   matFil[0][2] = 0;
-    matFil[1][0] = 1;   matFil[1][1] = -4;  matFil[1][2] = 1;
-    matFil[2][0] = 0;   matFil[2][1] = 1;   matFil[2][2] = 0;
-    Image* img = new Image("H.pgm");
-    Image* copyImg = img->filter(matFil, 100);
-    copyImg->save("test.pgm");
+    Image* img = new Image("B.pgm");
+
+    vector< vector< complex<double> > > vec = fft(img);
+    Image* fftImg = new Image(vec, true);
+    fftImg->save("fftImg.pgm");
+    swap(vec);
+
+    // ローパスフィルタ
+    for(int i = 0; i < vec.size(); i++) {
+        for(int j = 0; j < vec[i].size(); j++) {
+            if(i < vec.size() / 4 || i > 3 * vec.size() / 4
+                || j < vec[i].size() / 4 || j > 3 * vec[i].size() / 4) {
+                    vec[i][j] = 0;
+            }
+        }
+    }
+    Image* fftFilImg = new Image(vec, false);
+    fftFilImg->save("fftFilImg.pgm");
+
+    swap(vec);
+    vector< vector< complex<double> > > ifftVec = ifft(vec);
+    Image* ifftImg = new Image(ifftVec);
+    ifftImg->save("ifftImg.pgm");
 
     delete img;
-    delete copyImg;
+    if(fftImg != NULL) {
+        delete fftImg;
+    }
+    delete ifftImg;
+
     return 0;
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <complex>
 
 #include "ToneCurve.h"
 #include "Matrix.h"
@@ -26,6 +27,7 @@ public:
     Image(int height, int width, int fill = 0);
     Image(const char filename[]);
     Image(const Image& img);
+    Image(const std::vector< std::vector< std::complex<double> > >& vec, bool logFlag = false);
 
     // initial method
     void init();
@@ -42,6 +44,7 @@ public:
     double getContrast() const;
 
     unsigned char* operator[](int i) { return arr + i * width; }
+    unsigned char* operator[](int i) const { return arr + i * width; }
 
     void load(const char filename[]);
     void save(const char filename[]);
