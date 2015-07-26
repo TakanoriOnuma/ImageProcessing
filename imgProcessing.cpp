@@ -30,35 +30,59 @@ double filter(int i, int j, int height, int width)
 
 int main(int argc, char* argv[])
 {
-    Image* img = new Image("B.pgm");
+    Image* img = new Image("zui.pgm");
+    int rhoHeight = (int)sqrt(img->getHeight() * img->getHeight() + img->getWidth() * img->getWidth());
+    cout << "rhoHeight:" << rhoHeight << endl;
+    vector< vector<int> > voteMat(2 * rhoHeight, vector<int>((int)(100 * M_PI), 0));
 
-    vector< vector< complex<double> > > vec = fft(img);
-    Image* fftImg = new Image(vec, true);
-    fftImg->save("fftImg.pgm");
-    swap(vec);
-
-    // ローパスフィルタ
-    for(int i = 0; i < vec.size(); i++) {
-        for(int j = 0; j < vec[i].size(); j++) {
-            if(i < vec.size() / 4 || i > 3 * vec.size() / 4
-                || j < vec[i].size() / 4 || j > 3 * vec[i].size() / 4) {
-                    vec[i][j] = 0;
+    for(int i = 0; i < img->getWidth(); i++) {
+        for(int j = 0; j < img->getWidth(); j++) {
+            // 点であればそれに対応した線を引く
+            if((*img)[i][j] < 127) {
+                for(int theta = 0; theta < voteMat[0].size(); theta++) {
+                    double rad = theta * M_PI / voteMat[0].size();
+                    int rho = (int)(i * sin(rad) + j * cos(rad)) + rhoHeight;
+                    voteMat[rho][theta] += 1;
+                }
             }
         }
     }
-    Image* fftFilImg = new Image(vec, false);
-    fftFilImg->save("fftFilImg.pgm");
 
-    swap(vec);
-    vector< vector< complex<double> > > ifftVec = ifft(vec);
-    Image* ifftImg = new Image(ifftVec);
-    ifftImg->save("ifftImg.pgm");
-
-    delete img;
-    if(fftImg != NULL) {
-        delete fftImg;
+    // 代表点を見つける
+    vector<int> maxVotes(3, 0);
+    for(int rho = 0; rho < voteMat.size(); rho++) {
+        for(int theta = 0; theta < voteMat[rho].size(); theta++) {
+            for(int i = 0; i < maxVotes.size(); i++) {
+                if(voteMat[rho][theta] > maxVotes[i]) {
+                    for(int j = maxVotes.size() - 1; j > i; j--) {
+                        maxVotes[j] = maxVotes[j - 1];
+                    }
+                    maxVotes[i] = voteMat[rho][theta];
+                    break;
+                }
+            }
+        }
     }
-    delete ifftImg;
+    for(int i = 0; i < maxVotes.size(); i++) {
+        for(int rho = 0; rho < voteMat.size(); rho++) {
+            for(int theta = 0; theta < voteMat[rho].size(); theta++) {
+                if(voteMat[rho][theta] == maxVotes[i]) {
+                    cout << "(" << rho << ", " << theta << "):" << voteMat[rho][theta] << endl;
+                }
+            }
+        }
+    }
+
+    // ハフ変換の画像を作成する
+    Image* houghImg = new Image(2 * rhoHeight, (int)(100 * M_PI));
+    for(int i = 0; i < houghImg->getHeight(); i++) {
+        for(int j = 0; j < houghImg->getWidth(); j++) {
+            (*houghImg)[i][j] = (unsigned char)(255 * voteMat[i][j] / maxVotes[0]);
+        }
+    }
+    houghImg->save("houghImg.pgm");
+    delete img;
+    delete houghImg;
 
     return 0;
 }
