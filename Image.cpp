@@ -49,16 +49,14 @@ Image::Image(const Image& img) {
     init();
     this->format = img.format;
     this->comment = img.comment;
-    if(this->arr != NULL) {
-        this->height = img.height;
-        this->width  = img.width;
-        this->max    = img.max;
-        this->arr    = new unsigned char[this->height * this->width];
-        for(int i = 0; i < this->height; i++) {
-            for(int j = 0; j < this->width; j++) {
-                int idx = i * this->width + j;
-                this->arr[idx] = img.arr[idx];
-            }
+    this->height = img.height;
+    this->width  = img.width;
+    this->max    = img.max;
+    this->arr    = new unsigned char[this->height * this->width];
+    for(int i = 0; i < this->height; i++) {
+        for(int j = 0; j < this->width; j++) {
+            int idx = i * this->width + j;
+            this->arr[idx] = img.arr[idx];
         }
     }
 }
