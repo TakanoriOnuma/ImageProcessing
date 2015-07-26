@@ -63,15 +63,43 @@ int main(int argc, char* argv[])
             }
         }
     }
+    Image* imgLine = new Image(*img);
     for(int i = 0; i < maxVotes.size(); i++) {
         for(int rho = 0; rho < voteMat.size(); rho++) {
             for(int theta = 0; theta < voteMat[rho].size(); theta++) {
                 if(voteMat[rho][theta] == maxVotes[i]) {
                     cout << "(" << rho << ", " << theta << "):" << voteMat[rho][theta] << endl;
+
+                    // 特徴点を元に直線を求める
+                    int offset = rho - rhoHeight + 2;   // とりあえず2ピクセルずれている
+                    double rad = M_PI * theta / voteMat[0].size();
+                    double lean = cos(rad) / sin(rad);
+                    cout << "y = " << lean << "x - " << offset << endl;
+
+                    for(int x = 0; x < imgLine->getWidth(); x++) {
+                        int y = (int)(lean * x - offset);
+                        if(y >= 0 && y < imgLine->getHeight()) {
+                            (*imgLine)[y][x] = 127;
+                        }
+                    }
+
+                    // 反対バージョンもやる（どっちかしか書けない）
+                    offset = -offset;
+                    rad = M_PI - rad;
+                    lean = cos(rad) / sin(rad);
+                    cout << "y = " << lean << "x - " << offset << endl;
+
+                    for(int x = 0; x < imgLine->getWidth(); x++) {
+                        int y = (int)(lean * x - offset);
+                        if(y >= 0 && y < imgLine->getHeight()) {
+                            (*imgLine)[y][x] = 127;
+                        }
+                    }
                 }
             }
         }
     }
+    imgLine->save("zui_line.pgm");
 
     // ハフ変換の画像を作成する
     Image* houghImg = new Image(2 * rhoHeight, (int)(100 * M_PI));
